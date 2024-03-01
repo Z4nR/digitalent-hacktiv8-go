@@ -35,7 +35,7 @@ func getFriendByAbsent(absent int) Friend {
 func main() {
 
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run biodata.go <nomor_absen>")
+		fmt.Println("Usage: go run biodata.go <absent_number>")
 		os.Exit(1)
 	}
 
