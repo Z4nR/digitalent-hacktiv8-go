@@ -18,7 +18,7 @@ func getFriendByAbsent(absent int) Friend {
 
 	friendList := []Friend{
 		{1, "Zulham Ari", "Semarang", "Backend Developer", "Ingin mempelajari bahasa Go"},
-		{2, "Ali", "Jakarta", "Software Engineer", "Ingin mempelajari bahasa Go"},
+		{2, "Ali Ricky", "Jakarta", "Software Engineer", "Ingin mempelajari bahasa Go"},
 		{3, "Anggit", "Bandung", "Data Scientist", "Tertarik dengan kemampuan konkurensi di Go"},
 		{4, "Alfit", "Surabaya", "Backend Developer", "Menginginkan performa tinggi dari aplikasinya"},
 	}
