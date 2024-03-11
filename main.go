@@ -14,10 +14,10 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/person/:id", inDB.GetPerson)
-	router.GET("/persons", inDB.GetPersons)
-	router.POST("/person", inDB.CreatePerson)
-	router.PUT("/person/:id", inDB.UpdatePerson)
-	router.DELETE("/person/:id", inDB.DeletePerson)
+	router.POST("/orders", inDB.CreateOrder)
+	router.GET("/orders", inDB.GetOrders)
+	router.GET("/order/:id", inDB.GetOrder)
+	router.PUT("/order/:id", inDB.UpdateOrder)
+	router.DELETE("/order/:id", inDB.DeleteOrder)
 	router.Run(":3000")
 }

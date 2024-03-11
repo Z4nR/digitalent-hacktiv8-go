@@ -12,6 +12,8 @@ func DBInit() *gorm.DB {
 		panic("failed to connect to database")
 	}
 
-	db.AutoMigrate(model.Person{})
+	db.AutoMigrate(model.Order{})
+	db.AutoMigrate(model.Item{})
+	db.Model(model.Item{}).AddForeignKey("order_id", "orders(order_id)", "CASCADE", "CASCADE")
 	return db
 }
