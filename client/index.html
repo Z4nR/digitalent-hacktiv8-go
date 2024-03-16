@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Data Display</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="bg-image"></div>
+    <div id="data-display"></div>
+
+    <script>
+      function fetchData() {
+        fetch('http://localhost:3030/data')
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById('data-display').innerHTML = `
+                <div id="type-data">
+                    <h1>Wind: ${data.wind} m/s</h1>
+                    <h1>Water: ${data.water} m</h1>
+                </div>
+                <p>${data.status}</p>
+            `;
+          })
+          .catch((error) => console.error('Error fetching data:', error));
+      }
+
+      fetchData();
+      setInterval(fetchData, 15000);
+    </script>
+  </body>
+</html>
