@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"mygram/database"
+	"mygram/router"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	database.StartDB()
+	r := router.StartApp()
+	r.Run(":3000")
 }
