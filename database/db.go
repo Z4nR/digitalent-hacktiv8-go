@@ -27,7 +27,7 @@ func StartDB() {
 	}
 
 	fmt.Println("Berhasil tersambung ke db")
-	db.AutoMigrate(models.User{}, models.Photo{})
+	db.AutoMigrate(models.User{}, models.Photo{}, models.Comment{}, models.SocialMedia{})
 }
 
 func GetDB() *gorm.DB {

@@ -29,13 +29,12 @@ func UserRegister(ctx *gin.Context) {
 		fmt.Println(User)
 	}
 
-	err := db.Create(&User).Error
-
-	if err != nil {
+	if err := db.Debug().Create(&User).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "Bad Request",
 			"message": err.Error(),
 		})
+		return
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{
@@ -70,6 +69,7 @@ func UserLogin(ctx *gin.Context) {
 			"error":   "Unauthorized",
 			"message": "invalid email or password",
 		})
+		return
 	}
 
 	comparePass := helpers.ComparePass([]byte(User.Password), []byte(password))
@@ -79,6 +79,7 @@ func UserLogin(ctx *gin.Context) {
 			"error":   "Unauthorized",
 			"message": "invalid email or password",
 		})
+		return
 	}
 
 	token := helpers.GenerateToken(User.ID, User.Email)
@@ -116,7 +117,7 @@ func UserUpdate(ctx *gin.Context) {
 	}
 
 	var existingUser models.User
-	if err := db.First(&existingUser, userID).Error; err != nil {
+	if err := db.Debug().First(&existingUser, userID).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
