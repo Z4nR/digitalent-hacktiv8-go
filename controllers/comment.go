@@ -104,7 +104,7 @@ func GetUserComments(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusAccepted, result)
+	ctx.JSON(http.StatusOK, result)
 }
 
 func GetPhotoComments(ctx *gin.Context) {
@@ -116,7 +116,7 @@ func GetPhotoComments(ctx *gin.Context) {
 		result   gin.H
 	)
 
-	if err := db.Where("id = ?", photoId).First(&photo).Error; err != nil {
+	if err := db.First(&photo, photoId).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "Bad Request",
 			"message": err.Error(),
@@ -174,5 +174,31 @@ func UpdateComment(ctx *gin.Context) {
 		"message":    Comment.Message,
 		"photo_id":   Comment.PhotoID,
 		"user_id":    Comment.UserID,
+	})
+}
+
+func DeleteComment(ctx *gin.Context) {
+	db := database.GetDB()
+	Comment := models.Comment{}
+	commentId, _ := strconv.Atoi(ctx.Param("commentId"))
+
+	if err := db.Debug().First(&Comment, commentId).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := db.Debug().Delete(&Comment, commentId).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Your comment has been successfully deleted",
 	})
 }

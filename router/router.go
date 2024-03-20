@@ -14,7 +14,8 @@ func StartApp() *gin.Engine {
 	{
 		userRouter.POST("/register", controllers.UserRegister)
 		userRouter.POST("/login", controllers.UserLogin)
-		userRouter.Use(middlewares.Auth()).PUT("/", controllers.UserUpdate)
+		userRouter.Use(middlewares.Auth()).PUT("/", controllers.UpdateUser)
+		userRouter.Use(middlewares.Auth()).DELETE("/", controllers.DeleteUser)
 	}
 
 	photoRouter := r.Group("/photos")
@@ -24,6 +25,7 @@ func StartApp() *gin.Engine {
 		photoRouter.GET("/", controllers.GetUserPhotos)
 		photoRouter.GET("/all", controllers.GetAllPhotos)
 		photoRouter.PUT("/:photoId", middlewares.PhotoAuthz(), controllers.UpdatePhoto)
+		photoRouter.DELETE("/:photoId", middlewares.PhotoAuthz(), controllers.DeletePhoto)
 	}
 
 	commentRouter := r.Group("/comments")
@@ -33,6 +35,7 @@ func StartApp() *gin.Engine {
 		commentRouter.GET("/", controllers.GetUserComments)
 		commentRouter.GET("/photo/:photoId", controllers.GetPhotoComments)
 		commentRouter.PUT("/:commentId", middlewares.CommentAuthz(), controllers.UpdateComment)
+		commentRouter.DELETE("/:commentId", middlewares.CommentAuthz(), controllers.DeleteComment)
 	}
 
 	sosmedRouter := r.Group("/socialmedias")
@@ -41,6 +44,7 @@ func StartApp() *gin.Engine {
 		sosmedRouter.POST("/", controllers.PostSocialMedia)
 		sosmedRouter.GET("/", controllers.GetSocialMedias)
 		sosmedRouter.PUT("/:socialMediaId", middlewares.SosmedAuthz(), controllers.UpdateSocialMedia)
+		sosmedRouter.DELETE("/:socialMediaId", middlewares.SosmedAuthz(), controllers.DeleteSocialMedia)
 	}
 
 	return r

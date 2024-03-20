@@ -171,3 +171,40 @@ func UpdatePhoto(ctx *gin.Context) {
 		"user_id":    Photo.UserID,
 	})
 }
+
+func DeletePhoto(ctx *gin.Context) {
+	db := database.GetDB()
+	photoId, _ := strconv.Atoi(ctx.Param("photoId"))
+	var (
+		photo    models.Photo
+		comments []models.Comment
+	)
+
+	if err := db.First(&photo, photoId).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": "Data Tidak Ditemukan",
+		})
+		return
+	}
+
+	if err := db.Where("photo_id = ?", photoId).Delete(&comments).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := db.Delete(&photo).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Your photo has been successfully deleted",
+	})
+}

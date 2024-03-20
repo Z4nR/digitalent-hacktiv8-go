@@ -89,7 +89,7 @@ func GetSocialMedias(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusAccepted, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"social_medias": result,
 	})
 }
@@ -127,5 +127,31 @@ func UpdateSocialMedia(ctx *gin.Context) {
 		"name":             Sosmed.Name,
 		"social_media_url": Sosmed.SocialMediaUrl,
 		"user_id":          Sosmed.UserID,
+	})
+}
+
+func DeleteSocialMedia(ctx *gin.Context) {
+	db := database.GetDB()
+	Sosmed := models.SocialMedia{}
+	sosmedId, _ := strconv.Atoi(ctx.Param("socialMediaId"))
+
+	if err := db.Debug().First(&Sosmed, sosmedId).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := db.Debug().Delete(&Sosmed, sosmedId).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Your social media has been successfully deleted",
 	})
 }

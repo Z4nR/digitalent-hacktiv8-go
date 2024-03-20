@@ -97,7 +97,7 @@ func UserLogin(ctx *gin.Context) {
 	})
 }
 
-func UserUpdate(ctx *gin.Context) {
+func UpdateUser(ctx *gin.Context) {
 	db := database.GetDB()
 	userData := ctx.MustGet("userData").(jwt.MapClaims)
 	contentType := helpers.GetContentType(ctx)
@@ -136,5 +136,59 @@ func UserUpdate(ctx *gin.Context) {
 		"username":  existingUser.Username,
 		"id":        existingUser.ID,
 		"update_at": existingUser.UpdatedAt,
+	})
+}
+
+func DeleteUser(ctx *gin.Context) {
+	db := database.GetDB()
+	userData := ctx.MustGet("userData").(jwt.MapClaims)
+	userID := uint(userData["id"].(float64))
+	User := models.User{}
+	Photos := models.Photo{}
+	Comments := models.Comment{}
+	Sosmeds := models.SocialMedia{}
+
+	if err := db.First(&User, userID).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": "Data Tidak Ditemukan",
+		})
+		return
+	}
+
+	if err := db.Where("user_id = ?", userID).Delete(&Comments).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := db.Where("user_id = ?", userID).Delete(&Photos).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := db.Where("user_id = ?", userID).Delete(&Sosmeds).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := db.Delete(&User).Error; err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Your account has been successfully deleted",
 	})
 }
