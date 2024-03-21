@@ -88,7 +88,7 @@ func GetUserPhotos(ctx *gin.Context) {
 		})
 	}
 
-	ctx.JSON(http.StatusAccepted, result)
+	ctx.JSON(http.StatusOK, result)
 }
 
 func GetAllPhotos(ctx *gin.Context) {
