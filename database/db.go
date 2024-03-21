@@ -14,31 +14,12 @@ var (
 	host     = os.Getenv("PGHOST")
 	user     = os.Getenv("PGUSER")
 	password = os.Getenv("PGPASSWORD")
-	dbPort   = os.Getenv("PGPORT")
+	dbPort   = "47065"
 	dbName   = os.Getenv("PGDATABASE")
 	db       *gorm.DB
 )
 
 func StartDB() {
-	if dbPort == "" {
-		log.Fatal("PGPORT environment variable is not set")
-	}
-
-	if host == "" {
-		log.Fatal("PGPORT environment variable is not set")
-	}
-
-	if user == "" {
-		log.Fatal("PGPORT environment variable is not set")
-	}
-
-	if password == "" {
-		log.Fatal("PGPORT environment variable is not set")
-	}
-
-	if dbName == "" {
-		log.Fatal("PGPORT environment variable is not set")
-	}
 
 	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, dbPort)
 	var err error
