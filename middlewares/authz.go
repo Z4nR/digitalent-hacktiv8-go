@@ -10,6 +10,36 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func UserAuthz() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		db := database.GetDB()
+
+		userData := ctx.MustGet("userData").(jwt.MapClaims)
+		userID := uint(userData["id"].(float64))
+		User := models.User{}
+
+		err := db.Debug().Select("id").First(&User, userID).Error
+
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"error":   "Data Not Found",
+				"message": "data doesn't exist",
+			})
+			return
+		}
+
+		if User.ID != userID {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error":   "Unauthorized",
+				"message": "you aren't allowed to access this data",
+			})
+			return
+		}
+
+		ctx.Next()
+	}
+}
+
 func PhotoAuthz() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		db := database.GetDB()
