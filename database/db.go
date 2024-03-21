@@ -20,6 +20,10 @@ var (
 )
 
 func StartDB() {
+	if dbPort == "" {
+		log.Fatal("PGPORT environment variable is not set")
+	}
+
 	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, dbPort)
 	var err error
 	db, err = gorm.Open(postgres.Open(config), &gorm.Config{})
