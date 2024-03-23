@@ -160,7 +160,7 @@ func UpdateComment(ctx *gin.Context) {
 	Comment.UserID = userID
 	Comment.ID = uint(commentId)
 
-	if err := db.Debug().Model(&Comment).Where("id = ?", commentId).Update("message", "hello").Error; err != nil {
+	if err := db.Debug().Model(&Comment).Where("id = ?", commentId).Update("message", &Comment.Message).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error":   "Bad Request",
 			"message": err.Error(),
